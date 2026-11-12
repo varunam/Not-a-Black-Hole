@@ -1,0 +1,8 @@
+{
+  "name": "Not a Black Hole",
+  "description": "Minimalist video downloader with CRED-inspired luxury aesthetics, multi-theme customization, one-tap clipboard absorption, and instant sharing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
