@@ -64,18 +64,18 @@ fun ManualUrlDialog(
     val sampleLinks = remember {
         listOf(
             Triple(
-                "Direct MP4 Clip",
+                "Direct MP4 Test",
                 "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
                 CosmicCyan
             ),
             Triple(
-                "Twitter/X Clip",
-                "https://x.com/NASA/status/1815438597373731113",
+                "Twitter/X Format",
+                "https://x.com/jack/status/20",
                 CosmicPurple
             ),
             Triple(
                 "Instagram Reel",
-                "https://www.instagram.com/reel/C9abcd12345/",
+                "https://www.instagram.com/reel/C8P1r0YvYg8/",
                 CosmicPink
             )
         )
