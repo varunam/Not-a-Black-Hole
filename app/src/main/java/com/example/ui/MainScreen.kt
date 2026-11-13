@@ -68,6 +68,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.BlackHoleSingularity
 import com.example.ui.components.HistoryBottomSheet
+import com.example.ui.components.IntroScreen
 import com.example.ui.components.ManualUrlDialog
 import com.example.ui.components.SettingsDialog
 import com.example.ui.theme.ErrorRed
@@ -88,6 +89,7 @@ fun MainScreen(viewModel: MainViewModel) {
     val currentTheme by viewModel.currentTheme.collectAsStateWithLifecycle()
     val autoShareEnabled by viewModel.autoShareEnabled.collectAsStateWithLifecycle()
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
+    val showIntro by viewModel.showIntro.collectAsStateWithLifecycle()
 
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
@@ -524,7 +526,23 @@ fun MainScreen(viewModel: MainViewModel) {
             onSelectTheme = { viewModel.setTheme(it) },
             onToggleAutoShare = { viewModel.setAutoShare(it) },
             onToggleHaptics = { viewModel.setHaptics(it) },
+            onReplayIntro = {
+                showSettingsDialog = false
+                viewModel.openIntroFromSettings()
+            },
             onDismiss = { showSettingsDialog = false }
+        )
+    }
+
+    // First-Launch / Replayed Onboarding Walkthrough
+    AnimatedVisibility(
+        visible = showIntro,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        IntroScreen(
+            appTheme = currentTheme,
+            onComplete = { viewModel.completeIntro() }
         )
     }
 }

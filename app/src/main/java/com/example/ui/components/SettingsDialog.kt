@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,7 +44,6 @@ import androidx.compose.ui.window.Dialog
 import com.example.ui.theme.AppTheme
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 
 @Composable
 fun SettingsDialog(
@@ -51,6 +53,7 @@ fun SettingsDialog(
     onSelectTheme: (AppTheme) -> Unit,
     onToggleAutoShare: (Boolean) -> Unit,
     onToggleHaptics: (Boolean) -> Unit,
+    onReplayIntro: () -> Unit,
     onDismiss: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
@@ -63,6 +66,7 @@ fun SettingsDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .padding(22.dp)
             ) {
                 // Header
@@ -89,7 +93,7 @@ fun SettingsDialog(
 
                     IconButton(
                         onClick = onDismiss,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
@@ -100,7 +104,7 @@ fun SettingsDialog(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 // Theme section
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -200,6 +204,56 @@ fun SettingsDialog(
                             uncheckedTrackColor = currentTheme.surfaceBorder
                         ),
                         modifier = Modifier.testTag("haptics_switch")
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(color = currentTheme.surfaceBorder, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(14.dp))
+
+                // Replay Intro Walkthrough row
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(currentTheme.backgroundColor.copy(alpha = 0.6f))
+                        .border(1.dp, currentTheme.surfaceBorder, RoundedCornerShape(12.dp))
+                        .clickable { onReplayIntro() }
+                        .padding(horizontal = 14.dp, vertical = 12.dp)
+                        .testTag("replay_intro_button"),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.HelpOutline,
+                            contentDescription = "App Guide",
+                            tint = currentTheme.accentColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = "How It Works",
+                                color = TextPrimary,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "Replay the quick intro guide",
+                                color = TextMuted,
+                                fontSize = 11.sp
+                            )
+                        }
+                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = "Open Guide",
+                        tint = TextMuted,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 

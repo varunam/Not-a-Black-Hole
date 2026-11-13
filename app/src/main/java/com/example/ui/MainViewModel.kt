@@ -57,6 +57,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _hapticsEnabled = MutableStateFlow(prefs.getBoolean("haptics_enabled", true))
     val hapticsEnabled: StateFlow<Boolean> = _hapticsEnabled.asStateFlow()
 
+    private val _showIntro = MutableStateFlow(!prefs.getBoolean("has_seen_intro", false))
+    val showIntro: StateFlow<Boolean> = _showIntro.asStateFlow()
+
     val history: StateFlow<List<DownloadItem>> = historyRepository.allDownloads
         .stateIn(
             scope = viewModelScope,
@@ -100,6 +103,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         prefs.edit().putBoolean("haptics_enabled", enabled).apply()
     }
 
+    fun completeIntro() {
+        _showIntro.value = false
+        prefs.edit().putBoolean("has_seen_intro", true).apply()
+    }
+
+    fun openIntroFromSettings() {
+        _showIntro.value = true
+    }
+
     fun updateClipboardPreview(text: String?) {
         val trimmed = text?.trim() ?: ""
         if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
@@ -134,6 +146,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun processUrl(rawUrl: String) {
+        _showIntro.value = false
         val platform = videoExtractor.detectPlatform(rawUrl)
         _lastDetectedUrl.value = rawUrl
         _uiState.value = DownloadUiState.Extracting(rawUrl, platform)
